@@ -3,47 +3,47 @@ package twitter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
+import twitter.model.Dashboard;
+import twitter.model.Tweet;
 import java.util.stream.Stream;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import javax.persistence.Persistence;
 
-public class DashboardTest {
+class DashboardTest {
 
-	private Dashboard dashboard;
+    private Dashboard dashboard;
 
-	@BeforeEach
-	void beforeEach() {
-		dashboard = new Dashboard();
-	}
+    @BeforeEach
+    void beforeEach() throws Exception {
+        dashboard = new Dashboard(Persistence.createEntityManagerFactory("asdf").createEntityManager());
+    }
 
-	@DisplayName("author should be able to create a new twit")
-	@Test
-	void twitAuthor() {
-		// given
-		String msg = "content";
-		String author = "goobar";
+    @DisplayName("author should be able to create a new tweet")
+    @Test
+    void test0() {
+        // given
+        String msg = "content";
+        String author = "goobar";
 
-		// when
-		Tweet tweet = dashboard.create(msg, author);
+        // when
+        Tweet tweet = dashboard.create(msg, author);
 
-		// then
-		assertThat(tweet.getAuthor()).isEqualTo(author);
-		assertThat(tweet.getMessage()).isEqualTo(msg);
-	}
+        // then
+        assertThat(tweet.getMessage()).isEqualTo(msg);
+    }
 
-	@DisplayName("should load created twit from the dashboard")
-	@Test
-	void db() {
-		// given
-		String msg = "content";
-		String author = "goobar";
-		Tweet tweet = dashboard.create(msg, author);
+    @DisplayName("should load created tweet from the dashboard")
+    @Test
+    void test1() {
+        // given
+        String msg = "content";
+        String author = "goobar";
+        Tweet tweet = dashboard.create(msg, author);
 
-		// when
-		Stream<Tweet> allTwits = dashboard.load();
+        // when
+        Stream<Tweet> allTweets = dashboard.load();
 
-		// then
-		assertThat(allTwits).containsOnly(tweet);
-	}
+        // then
+        assertThat(allTweets).containsExactlyInAnyOrder(tweet);
+    }
 }
