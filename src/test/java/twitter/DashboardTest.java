@@ -7,6 +7,9 @@ import twitter.model.Dashboard;
 import twitter.model.Tweet;
 import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 class DashboardTest {
@@ -15,7 +18,9 @@ class DashboardTest {
 
     @BeforeEach
     void beforeEach() throws Exception {
-        dashboard = new Dashboard(Persistence.createEntityManagerFactory("asdf").createEntityManager());
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("asdf");
+        EntityManager entityManager = factory.createEntityManager();
+        dashboard = new Dashboard(entityManager);
     }
 
     @DisplayName("author should be able to create a new tweet")
