@@ -23,15 +23,11 @@ All Tweets:
 <table>
     <tr>
         <td>Message</td>
-        <td>Author</td>
     </tr>
     <c:forEach var="tweet" items="${tweets}">
         <tr>
             <td>
                 <c:out value="${tweet.message}"/>
-            </td>
-            <td>
-                <c:out value="${tweet.author}"/>
             </td>
         </tr>
     </c:forEach>

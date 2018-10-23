@@ -41,6 +41,10 @@ public class EmbeddedTomcatFactory {
 		resources.addPreResources(new DirResourceSet(resources,
 			"/WEB-INF/classes", additionWebInfClasses
 			.getAbsolutePath(), "/"));
+		// Copy dependencies
+		resources.addPreResources(new DirResourceSet(resources,
+			"/WEB-INF/lib", new File("target/lib").getAbsolutePath
+			(), "/"));
 		ctx.setResources(resources);
 
 		return tomcat;
