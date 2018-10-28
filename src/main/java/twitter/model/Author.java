@@ -15,6 +15,12 @@ public class Author {
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "fk_tweet")
     private Collection<Tweet> tweets;
+    private String password;
+
+    public Author(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 
     public Author(String name) {
         this.name = name;
@@ -31,6 +37,14 @@ public class Author {
                 ", name='" + name + '\'' +
                 ", tweets=" + tweets +
                 '}';
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
