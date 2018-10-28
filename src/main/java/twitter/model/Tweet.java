@@ -3,6 +3,7 @@ package twitter.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 @Entity
 public class Tweet {
@@ -11,6 +12,34 @@ public class Tweet {
 	@GeneratedValue
 	private Integer id;
 	private String message;
+	@Transient
+	private String author;
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Tweet tweet = (Tweet) o;
+
+		if (message != null ? !message.equals(tweet.message) : tweet.message != null) return false;
+		return author != null ? author.equals(tweet.author) : tweet.author == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = message != null ? message.hashCode() : 0;
+		result = 31 * result + (author != null ? author.hashCode() : 0);
+		return result;
+	}
 
 	public Tweet() {
 	}
@@ -22,24 +51,6 @@ public class Tweet {
 
 	public String getMessage() {
 		return message;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-
-		Tweet tweet = (Tweet) o;
-
-		if (id != null ? !id.equals(tweet.id) : tweet.id != null) return false;
-		return message != null ? message.equals(tweet.message) : tweet.message == null;
-	}
-
-	@Override
-	public int hashCode() {
-		int result = id != null ? id.hashCode() : 0;
-		result = 31 * result + (message != null ? message.hashCode() : 0);
-		return result;
 	}
 
 	@Override
