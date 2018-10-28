@@ -1,31 +1,43 @@
 package twitter.db;
 
 import twitter.model.Author;
-import twitter.model.AuthorRepository;
 import twitter.model.AuthorRepositoryException;
-import twitter.model.Tweet;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
+import java.util.stream.Stream;
 
-public class JPAAuthorRepository implements AuthorRepository {
+public class JPAAuthorRepository {
     private EntityManager entityManager;
 
-    @Override
+    public JPAAuthorRepository(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+
     public void save(Author author) throws AuthorRepositoryException {
+
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        TypedQuery<Author> authorQuery = entityManager.createQuery("SELECT a FROM Author a WHERE a.id = :id",Author.class);
-        authorQuery.setParameter("id", author.getId());
-        Author existingAuthor = authorQuery.getSingleResult();
+        try {
+            entityManager.persist(author);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new AuthorRepositoryException("Can't create a new Author");
+        }
 
-        //authorQuery.getResultStream().forEach(au -> au.equals(author));
 
     }
 
-    @Override
-    public void findAllTweets() throws AuthorRepositoryException {
+    public Stream<Author> findAll() throws AuthorRepositoryException {
+        return entityManager.createQuery("SELECT a FROM Author a", Author.class).getResultStream();
 
+    }
+
+    public boolean validateUser(String name, String password) {
+        return findAll().anyMatch(
+                author -> author.getName().equals(name) && author.getPassword().equals(password)
+        );
     }
 }
