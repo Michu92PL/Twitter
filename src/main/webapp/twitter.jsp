@@ -15,17 +15,22 @@
 
 <form action="/twitter" method="post">
     Message: <input type="text" name="message"/>
-    Author: <input type="author" name="author"/>
     <input type="submit" value="Post Tweet"/>
 </form>
 
-All Tweets:
+<h3>All Tweets:</h3>
 <table>
     <tr>
+        <td>Author</td>
         <td>Message</td>
     </tr>
     <c:forEach var="tweet" items="${tweets}">
         <tr>
+
+            <td>
+                <c:out value="${tweet.author}"/>
+            </td>
+
             <td>
                 <c:out value="${tweet.message}"/>
             </td>
